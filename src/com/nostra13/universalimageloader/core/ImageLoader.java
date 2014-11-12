@@ -240,6 +240,10 @@ public class ImageLoader {
 		Bitmap bmp = configuration.memoryCache.get(memoryCacheKey);
 		if (bmp != null && !bmp.isRecycled()) {//若图片在内存中
 			L.d(LOG_LOAD_IMAGE_FROM_MEMORY_CACHE, memoryCacheKey);
+			/**
+			 * 打印为：Load image from memory cache [file:///sdcard/Universal Image Loader @#&=+-_.,!()~'%20.png_144x144]
+
+			 */
 			Log.i(TAG,"图片在内存中，bmp不为空且没被回收:"+memoryCacheKey+ " 图片"+bmp);
 
 			if (options.shouldPostProcess()) {
@@ -258,6 +262,14 @@ public class ImageLoader {
 			}
 		} else {
 			Log.i(TAG,"图片不在内存中："+uri);
+			/**
+			 * ①：开启显示图片的task：start display image task
+			 * 		SD卡有，则读取SD卡;否则从网络加载
+			 * ②：从网络加载图片：Load image from network
+			 * ③：缓存图片到SD卡：Cache image on disk
+			 * ④：缓存图片到内存中：Cache image in menory
+			 * ⑤：将图片显示到ImageView上
+			 */
 			if (options.shouldShowImageOnLoading()) {//显示图片下载前的图案
 				imageAware.setImageDrawable(options.getImageOnLoading(configuration.resources));
 			} else if (options.isResetViewBeforeLoading()) {
