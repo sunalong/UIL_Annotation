@@ -36,6 +36,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.nostra13.universalimageloader.sample.Constants;
+import com.nostra13.universalimageloader.sample.GlobalParams;
 import com.nostra13.universalimageloader.sample.MyFileNameGenerator;
 import com.nostra13.universalimageloader.sample.R;
 import com.nostra13.universalimageloader.utils.StorageUtils;
@@ -142,6 +143,7 @@ public class ImageListFragment extends AbsListViewBaseFragment {
 
 			holder.text.setText("Item " + (position + 1));
 			Log.i(TAG,"文件"+position+"缓存名为"+lruDiscCache.get(imageUrls[position]));
+//			GlobalParams.config.createDefault(context)
 			ImageLoader.getInstance().displayImage(imageUrls[position], holder.image, options, animateFirstListener);
 
 			return view;

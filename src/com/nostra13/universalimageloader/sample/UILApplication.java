@@ -58,6 +58,7 @@ public class UILApplication extends Application {
 				.writeDebugLogs() // Remove for release app
 				.build();
 		// Initialize ImageLoader with configuration.
+		GlobalParams.config = config;
 		ImageLoader.getInstance().init(config);
 	}
 }
