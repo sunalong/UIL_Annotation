@@ -16,10 +16,12 @@
 package com.nostra13.universalimageloader.sample.fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,17 +54,25 @@ public class ImagePagerFragment extends BaseFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+//		options = new DisplayImageOptions.Builder()
+//				.showImageForEmptyUri(R.drawable.ic_empty)
+//				.showImageOnFail(R.drawable.ic_error)
+//				.resetViewBeforeLoading(true)
+//				.cacheOnDisk(true)
+////				.imageScaleType(ImageScaleType.EXACTLY)
+//				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+//				.bitmapConfig(Bitmap.Config.RGB_565)
+////				.considerExifParams(true)
+//				.displayer(new FadeInBitmapDisplayer(300))
+//				.build();
+		
 		options = new DisplayImageOptions.Builder()
-				.showImageForEmptyUri(R.drawable.ic_empty)
-				.showImageOnFail(R.drawable.ic_error)
-				.resetViewBeforeLoading(true)
-				.cacheOnDisk(true)
-//				.imageScaleType(ImageScaleType.EXACTLY)
-				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
-				.bitmapConfig(Bitmap.Config.RGB_565)
-				.considerExifParams(true)
-				.displayer(new FadeInBitmapDisplayer(300))
-				.build();
+		.showImageOnLoading(R.drawable.ic_stub)
+		.cacheInMemory(true)
+		.cacheOnDisc(true)
+		.bitmapConfig(Config.RGB_565)
+		.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
+		.build();
 	}
 
 	@Override
@@ -76,6 +86,7 @@ public class ImagePagerFragment extends BaseFragment {
 
 	private class ImageAdapter extends PagerAdapter {
 
+		private static final String TAG = "ImageAdapter";
 		private LayoutInflater inflater;
 
 		ImageAdapter() {
@@ -94,49 +105,53 @@ public class ImagePagerFragment extends BaseFragment {
 
 		@Override
 		public Object instantiateItem(ViewGroup view, int position) {
-			LayoutParams params = new LayoutParams(640, 11520);
 			View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
 			assert imageLayout != null;
-			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.imageMy);
+			LayoutParams params = new LayoutParams(640, 9520);
 			imageView.setLayoutParams(params);// ÎªÍ¼Æ¬ÉèÖÃ¿í¸ß
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
-				@Override
-				public void onLoadingStarted(String imageUri, View view) {
-					spinner.setVisibility(View.VISIBLE);
-				}
-
-				@Override
-				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-					String message = null;
-					switch (failReason.getType()) {
-						case IO_ERROR:
-							message = "Input/Output error";
-							break;
-						case DECODING_ERROR:
-							message = "Image can't be decoded";
-							break;
-						case NETWORK_DENIED:
-							message = "Downloads are denied";
-							break;
-						case OUT_OF_MEMORY:
-							message = "Out Of Memory error";
-							break;
-						case UNKNOWN:
-							message = "Unknown error";
-							break;
-					}
-					Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
-					spinner.setVisibility(View.GONE);
-				}
-
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-					spinner.setVisibility(View.GONE);
-				}
-			});
+			Log.i(TAG,"ÍøÖ·£º"+imageUrls[position]);
+			Log.i(TAG,"imageView£º"+imageView);
+			Log.i(TAG,"options£º"+options);
+			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options);
+//			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {
+//				@Override
+//				public void onLoadingStarted(String imageUri, View view) {
+//					spinner.setVisibility(View.VISIBLE);
+//				}
+//
+//				@Override
+//				public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+//					String message = null;
+//					switch (failReason.getType()) {
+//						case IO_ERROR:
+//							message = "Input/Output error";
+//							break;
+//						case DECODING_ERROR:
+//							message = "Image can't be decoded";
+//							break;
+//						case NETWORK_DENIED:
+//							message = "Downloads are denied";
+//							break;
+//						case OUT_OF_MEMORY:
+//							message = "Out Of Memory error";
+//							break;
+//						case UNKNOWN:
+//							message = "Unknown error";
+//							break;
+//					}
+//					Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+//
+//					spinner.setVisibility(View.GONE);
+//				}
+//
+//				@Override
+//				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//					spinner.setVisibility(View.GONE);
+//				}
+//			});
 
 			view.addView(imageLayout, 0);
 			return imageLayout;
