@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.FrameLayout.LayoutParams;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -55,7 +57,8 @@ public class ImagePagerFragment extends BaseFragment {
 				.showImageOnFail(R.drawable.ic_error)
 				.resetViewBeforeLoading(true)
 				.cacheOnDisk(true)
-				.imageScaleType(ImageScaleType.EXACTLY)
+//				.imageScaleType(ImageScaleType.EXACTLY)
+				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)
 				.bitmapConfig(Bitmap.Config.RGB_565)
 				.considerExifParams(true)
 				.displayer(new FadeInBitmapDisplayer(300))
@@ -91,9 +94,11 @@ public class ImagePagerFragment extends BaseFragment {
 
 		@Override
 		public Object instantiateItem(ViewGroup view, int position) {
+			LayoutParams params = new LayoutParams(640, 11520);
 			View imageLayout = inflater.inflate(R.layout.item_pager_image, view, false);
 			assert imageLayout != null;
 			ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
+			imageView.setLayoutParams(params);// ÎªÍ¼Æ¬ÉèÖÃ¿í¸ß
 			final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
 			ImageLoader.getInstance().displayImage(imageUrls[position], imageView, options, new SimpleImageLoadingListener() {

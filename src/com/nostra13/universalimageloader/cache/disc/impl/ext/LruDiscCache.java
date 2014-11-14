@@ -15,6 +15,12 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.cache.disc.impl.ext;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -22,12 +28,6 @@ import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.FileNameGenerator;
 import com.nostra13.universalimageloader.utils.IoUtils;
 import com.nostra13.universalimageloader.utils.L;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Disk cache based on "Least-Recently Used" principle. Adapter pattern, adapts
